@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 18:47:06 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/24 12:57:17 by hiono            ###   ########.fr       */
+/*   Updated: 2024/04/24 15:49:02 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_table	init_table(int argc, char **argv)
 		table.max_eat_count = 0;
 	table.start_time = get_ms();
 	table.is_finished = 0;
+	pthread_mutex_init(&table.lock, NULL);
 	return (table);
 }
 
@@ -46,6 +47,7 @@ t_philo	*init_philos(t_table *table, t_fork *forks)
 		philos[i].r_fork = &forks[i];
 		philos[i].l_fork = &forks[(i + 1) % table->philo_num];
 		philos[i].table = table;
+		pthread_mutex_init(&philos[i].lock, NULL);
 		i++;
 	}
 	return (philos);

@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 17:58:38 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/24 13:15:51 by hiono            ###   ########.fr       */
+/*   Updated: 2024/04/24 16:57:17 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 # include <unistd.h>
 # include <pthread.h>
 # include <sys/time.h>
+# include <stdbool.h>
+
+//typedef int bool;
 
 typedef struct s_fork
 {
@@ -28,26 +31,28 @@ typedef struct s_fork
 
 typedef struct s_table
 {
-	int		philo_num;
-	int		death_time;
-	int		eat_time;
-	int		sleep_time;
-	long	start_time;
-	int		is_finished; //someone dead or all full
-	int		max_eat_count; //0 if not specified
+	int				philo_num;
+	int				death_time;
+	int				eat_time;
+	int				sleep_time;
+	long			start_time;
+	bool			is_finished; 	//someone dead or all full
+	int				max_eat_count; 	//0 if not specified
+	pthread_mutex_t	lock;
 }			t_table;
 
 typedef struct s_philo
 {
-	int			id;
-	int			eat_count;
-	long		last_eat;
-	int			is_alive;
-	int			is_full;
-	t_fork		*r_fork;
-	t_fork		*l_fork;
-	pthread_t	td;
-	t_table		*table;
+	int				id;
+	long			eat_count;
+	long			last_eat;
+	bool			is_alive;
+	bool			is_full;
+	t_fork			*r_fork;
+	t_fork			*l_fork;
+	pthread_t		td;
+	t_table			*table;
+	pthread_mutex_t	lock;
 }			t_philo;
 
 int		is_args_pnum(int argc, char **argv);
@@ -60,5 +65,10 @@ void	ft_usleep(long ms);
 int		ft_atoi(char *str);
 void	start_dinner(t_table *table, t_philo *philos);
 void	*monitor(void *v_philos);
+
+void	exclusive_set_bool(bool *dst, bool value, pthread_mutex_t *lock);
+bool	exclusive_get_bool(bool *value, pthread_mutex_t *lock);
+void	exclusive_set_long(long *dst, long value, pthread_mutex_t *lock);
+long	exclusive_get_long(long *value, pthread_mutex_t *lock);
 
 #endif
