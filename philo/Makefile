@@ -15,7 +15,10 @@ INCS = -Iinc/
 SRC = main.c \
 		validation.c \
 		time.c \
-		init.c
+		init.c \
+		utils.c \
+		dinner.c \
+		monitor.c
 
 #SRC_BONUS = main_bonus.c \
 
@@ -43,8 +46,6 @@ $(OBJ_DIR)%.o:$(SRC_DIR)%.c
 #	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
 
 clean:
-	make -C $(LFT_DIR) clean
-	make -C $(PRNT_DIR) clean
 	rm -rf $(OBJ_DIR)
 #	rm -rf $(OBJ_BONUS_DIR)
 
@@ -52,5 +53,9 @@ fclean:clean
 	rm -rf $(NAME) #${NAME_BONUS}
 
 re:fclean all
+
+#TODO:remove before submission
+debug: $(SRCS)
+	$(CC) $(SRCS) $(CFLAGS) $(INCS) -g -o $@
 
 .PHONY: all clean fclean re #bonus

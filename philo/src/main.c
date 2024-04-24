@@ -6,31 +6,11 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 18:11:33 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/23 18:57:16 by hiono            ###   ########.fr       */
+/*   Updated: 2024/04/24 13:12:14 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
-
-int	ft_atoi(char *str)
-{
-	int res;
-	int	sign;
-
-	sign = 1;
-	if (*str == '-')
-	{
-		sign = -1;
-		str++;
-	}
-	res = 0;
-	while (*str)
-	{
-		res += res * 10 + *str - '0';
-		str++;
-	}
-	return (sign * res);
-}
 
 int	main(int argc, char **argv)
 {
@@ -48,12 +28,16 @@ int	main(int argc, char **argv)
 		printf("All arguments should be positive numbers");
 		return (1);
 	}
-	init_table(&table, argc, argv);
-	forks = malloc(table.philo_num * sizeof(t_fork));
-	init_forks(forks, &table);
-	philos = malloc(table.philo_num * sizeof(t_philo));
-	init_philos(philos, &table, forks);
-	//start_dinner(&table, philos, forks);
+	table = init_table(argc, argv);
+	forks = init_forks(&table);
+	philos = init_philos(&table, forks);
+	start_dinner(&table, philos);
+	int i = 0;
+	while (i < table.philo_num)
+	{
+		pthread_mutex_destroy(&forks[i].lock);
+		i++;
+	}
 	free(forks);
 	free(philos);
 }

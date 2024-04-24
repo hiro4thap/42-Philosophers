@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 17:58:38 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/23 18:56:11 by hiono            ###   ########.fr       */
+/*   Updated: 2024/04/24 13:15:51 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,14 @@ typedef struct s_philo
 }			t_philo;
 
 int		is_args_pnum(int argc, char **argv);
-void	init_table(t_table *table, int argc, char **argv);
-void	init_philos(t_philo *philos, t_table *table, t_fork *forks);
-void	init_forks(t_fork *forks, t_table *table);
+t_table	init_table(int argc, char **argv);
+t_philo	*init_philos(t_table *table, t_fork *forks);
+t_fork	*init_forks(t_table *table);
 
 long	get_ms(void);
+void	ft_usleep(long ms);
 int		ft_atoi(char *str);
+void	start_dinner(t_table *table, t_philo *philos);
+void	*monitor(void *v_philos);
 
 #endif

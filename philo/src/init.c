@@ -6,30 +6,35 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 18:47:06 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/23 18:57:34 by hiono            ###   ########.fr       */
+/*   Updated: 2024/04/24 12:57:17 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	init_table(t_table *table, int argc, char **argv)
+t_table	init_table(int argc, char **argv)
 {
-	table->philo_num = ft_atoi(argv[1]);
-	table->death_time = ft_atoi(argv[2]);
-	table->eat_time = ft_atoi(argv[3]);
-	table->sleep_time = ft_atoi(argv[4]);
+	t_table	table;
+
+	table.philo_num = ft_atoi(argv[1]);
+	table.death_time = ft_atoi(argv[2]);
+	table.eat_time = ft_atoi(argv[3]);
+	table.sleep_time = ft_atoi(argv[4]);
 	if (argc == 6)
-		table->max_eat_count = ft_atoi(argv[5]);
+		table.max_eat_count = ft_atoi(argv[5]);
 	else
-		table->max_eat_count = 0;
-	table->start_time = get_ms();
-	table->is_finished = 0;
+		table.max_eat_count = 0;
+	table.start_time = get_ms();
+	table.is_finished = 0;
+	return (table);
 }
 
-void	init_philos(t_philo *philos, t_table *table, t_fork *forks)
+t_philo	*init_philos(t_table *table, t_fork *forks)
 {
-	int	i;
+	t_philo	*philos;
+	int		i;
 
+	philos = malloc(table->philo_num * sizeof(t_philo));
 	i = 0;
 	while (i < table->philo_num)
 	{
@@ -43,12 +48,15 @@ void	init_philos(t_philo *philos, t_table *table, t_fork *forks)
 		philos[i].table = table;
 		i++;
 	}
+	return (philos);
 }
 
-void	init_forks(t_fork *forks, t_table *table)
+t_fork	*init_forks(t_table *table)
 {
-	int	i;
+	t_fork	*forks;
+	int		i;
 
+	forks = malloc(table->philo_num * sizeof(t_fork));
 	i = 0;
 	while (i < table->philo_num)
 	{
@@ -56,4 +64,5 @@ void	init_forks(t_fork *forks, t_table *table)
 		pthread_mutex_init(&forks[i].lock, NULL);
 		i++;
 	}
+	return (forks);
 }

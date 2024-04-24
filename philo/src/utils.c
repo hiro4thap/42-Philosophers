@@ -1,32 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/23 18:49:27 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/24 12:38:31 by hiono            ###   ########.fr       */
+/*   Created: 2024/04/24 11:48:26 by hiono             #+#    #+#             */
+/*   Updated: 2024/04/24 12:45:11 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-long	get_ms(void)
+int	ft_atoi(char *str)
 {
-	struct timeval tp;
+	int res;
+	int	sign;
 
-	gettimeofday(&tp, NULL);
-	long ms = tp.tv_sec * 1000 + tp.tv_usec / 1000;
-	return (ms);
+	sign = 1;
+	if (*str == '-')
+	{
+		sign = -1;
+		str++;
+	}
+	res = 0;
+	while (*str)
+	{
+		res = res * 10 + *str - '0';
+		str++;
+	}
+	return (sign * res);
 }
-
-void	ft_usleep(long ms)
-{
-	long	start;
-
-	start = get_ms();
-	while((get_ms() - start) < ms)
-		usleep(ms / 10);
-}
-
