@@ -13,6 +13,9 @@ NAME_BONUS = philo_bonus
 INCS = -Iinc/
 
 SRC = main.c \
+		validation.c \
+		time.c \
+		init.c
 
 #SRC_BONUS = main_bonus.c \
 
