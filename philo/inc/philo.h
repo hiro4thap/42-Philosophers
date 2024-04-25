@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 17:58:38 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/24 16:57:17 by hiono            ###   ########.fr       */
+/*   Updated: 2024/04/25 16:55:35 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ typedef struct s_philo
 	int				id;
 	long			eat_count;
 	long			last_eat;
-	bool			is_alive;
 	bool			is_full;
 	t_fork			*r_fork;
 	t_fork			*l_fork;
@@ -62,6 +61,7 @@ t_fork	*init_forks(t_table *table);
 
 long	get_ms(void);
 void	ft_usleep(long ms);
+long	get_timestamp(t_table *table);
 int		ft_atoi(char *str);
 void	start_dinner(t_table *table, t_philo *philos);
 void	*monitor(void *v_philos);

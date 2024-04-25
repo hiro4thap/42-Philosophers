@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:14:30 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/24 18:08:08 by hiono            ###   ########.fr       */
+/*   Updated: 2024/04/25 17:01:54 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	*monitor(void *v_philos)
 {
 	t_philo	*philos;
 	int 	i;
-	long	elapsed_time;
+	long	hungry_duration;
 
 	philos = (t_philo *)v_philos;
 	i = 0;
@@ -43,13 +43,11 @@ void	*monitor(void *v_philos)
 		}
 		while (i < philos[0].table->philo_num)
 		{
-			elapsed_time = get_ms() - exclusive_get_long(&philos[i].last_eat, &philos[i].lock);
-			if (philos[0].table->death_time < elapsed_time)
+			hungry_duration = get_ms() - exclusive_get_long(&philos[i].last_eat, &philos[i].lock);
+			if (philos[0].table->death_time < hungry_duration)
 			{
-				exclusive_set_bool(&philos[i].is_alive, 0, &philos[i].lock);
 				exclusive_set_bool(&philos[0].table->is_finished, 1, &philos[i].lock);
-				printf("%-10ld %d eat_count: %ld, passed_time: %ld\n", elapsed_time, philos[i].id, philos[i].eat_count, get_ms() - philos[i].last_eat);
-				printf("%-10ld %d died\n", elapsed_time, philos[i].id);
+				printf("%-10ld %d died\n", get_timestamp(philos[0].table), philos[i].id);
 				break;
 			}
 			i++;
@@ -61,5 +59,3 @@ void	*monitor(void *v_philos)
 	}
 	return (NULL);
 }
-
-

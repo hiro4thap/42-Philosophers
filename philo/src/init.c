@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 18:47:06 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/24 15:49:02 by hiono            ###   ########.fr       */
+/*   Updated: 2024/04/25 16:55:46 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ t_philo	*init_philos(t_table *table, t_fork *forks)
 		philos[i].id = i + 1;
 		philos[i].eat_count = 0;
 		philos[i].last_eat = get_ms();
-		philos[i].is_alive = 1;
 		philos[i].is_full = 0;
 		philos[i].r_fork = &forks[i];
 		philos[i].l_fork = &forks[(i + 1) % table->philo_num];

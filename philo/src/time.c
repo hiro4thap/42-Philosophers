@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 18:49:27 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/24 12:38:31 by hiono            ###   ########.fr       */
+/*   Updated: 2024/04/25 16:52:44 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@ void	ft_usleep(long ms)
 
 	start = get_ms();
 	while((get_ms() - start) < ms)
-		usleep(ms / 10);
+		usleep(ms);
 }
 
+long	get_timestamp(t_table *table)
+{
+	return (get_ms() - table->start_time);
+}
