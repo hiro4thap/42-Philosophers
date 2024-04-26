@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 18:49:27 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/25 16:52:44 by hiono            ###   ########.fr       */
+/*   Updated: 2024/04/25 17:55:23 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	ft_usleep(long ms)
 	long	start;
 
 	start = get_ms();
+	usleep(ms * 900);
 	while((get_ms() - start) < ms)
 		usleep(ms);
 }

@@ -6,19 +6,42 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:09:59 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/25 17:01:48 by hiono            ###   ########.fr       */
+/*   Updated: 2024/04/26 12:51:43 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	*routine(void *v_philo)
+void	*solo_routine(void *v_philo)
+{
+	t_philo *philo;
+
+	philo = (t_philo *)v_philo;
+	printf("%-10ld %d has taken a fork\n", get_ms() - philo->table->start_time, philo->id);
+	return (NULL);
+}
+
+void	solo_dinner(t_philo *philos)
+{
+	pthread_t	td;
+
+	if (pthread_create(&philos[0].td, NULL, solo_routine, (void *) &philos[0]))
+		printf("fail to create philos thread\n");
+	if (pthread_create(&td, NULL, monitor, (void *) philos))
+		printf("fail to create monitor thread\n");
+	if (pthread_join(philos[0].td, NULL))
+		printf("fail to join philos thread\n");
+	if (pthread_join(td, NULL))
+		printf("fail to join monitor thread\n");
+}
+
+void	*multi_routine(void *v_philo)
 {
 	t_philo *philo;
 
 	philo = (t_philo *)v_philo;
 	if (philo->id % 2 == 1)
-		ft_usleep(30);
+		ft_usleep(20);
 	while (!philo->table->is_finished && (!philo->table->max_eat_count || exclusive_get_long(&philo->eat_count, &philo->lock) < philo->table->max_eat_count))
 	{
 		// take fork
@@ -37,11 +60,11 @@ void	*routine(void *v_philo)
 			printf("%-10ld %d is eating\n", get_ms() - philo->table->start_time, philo->id);
 		}
 		ft_usleep(philo->table->eat_time);
-		exclusive_set_long(&philo->eat_count, philo->eat_count + 1, &philo->lock);
 		if (pthread_mutex_unlock(&philo->l_fork->lock))
 			printf("%d fail to unlock lfork for some reason\n", philo->id);
 		if (pthread_mutex_unlock(&philo->r_fork->lock))
 			printf("%d fail to unlock rfork for some reason\n", philo->id);
+		exclusive_set_long(&philo->eat_count, philo->eat_count + 1, &philo->lock);
 		if (exclusive_get_long(&philo->eat_count, &philo->lock) == philo->table->max_eat_count)
 			exclusive_set_bool(&philo->is_full, 1, &philo->lock);
 		// sleep
@@ -57,7 +80,7 @@ void	*routine(void *v_philo)
 	return (NULL);
 }
 
-void	start_dinner(t_table *table, t_philo *philos)
+void	multi_dinner(t_table *table, t_philo *philos)
 {
 	int			i;
 	pthread_t	td;
@@ -65,7 +88,7 @@ void	start_dinner(t_table *table, t_philo *philos)
 	i = 0;
 	while (i < table->philo_num)
 	{
-		if (pthread_create(&philos[i].td, NULL, routine, (void *) &philos[i]))
+		if (pthread_create(&philos[i].td, NULL, multi_routine, (void *) &philos[i]))
 			printf("fail to create philos thread\n");
 		i++;
 	}

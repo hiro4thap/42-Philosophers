@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 11:48:26 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/24 12:45:11 by hiono            ###   ########.fr       */
+/*   Updated: 2024/04/26 12:50:44 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,14 @@
 int	ft_atoi(char *str)
 {
 	int res;
-	int	sign;
 
-	sign = 1;
-	if (*str == '-')
-	{
-		sign = -1;
+	if (*str == '+')
 		str++;
-	}
 	res = 0;
 	while (*str)
 	{
 		res = res * 10 + *str - '0';
 		str++;
 	}
-	return (sign * res);
+	return (res);
 }

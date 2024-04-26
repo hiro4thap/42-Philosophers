@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 17:58:38 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/25 16:55:35 by hiono            ###   ########.fr       */
+/*   Updated: 2024/04/26 12:44:06 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ long	get_ms(void);
 void	ft_usleep(long ms);
 long	get_timestamp(t_table *table);
 int		ft_atoi(char *str);
-void	start_dinner(t_table *table, t_philo *philos);
+void	solo_dinner(t_philo *philos);
+void	multi_dinner(t_table *table, t_philo *philos);
 void	*monitor(void *v_philos);
 
 void	exclusive_set_bool(bool *dst, bool value, pthread_mutex_t *lock);
