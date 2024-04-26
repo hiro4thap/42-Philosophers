@@ -19,7 +19,8 @@ SRC = main.c \
 		utils.c \
 		dinner.c \
 		monitor.c \
-		exclusive.c
+		exclusive.c \
+		protect.c
 
 #SRC_BONUS = main_bonus.c \
 

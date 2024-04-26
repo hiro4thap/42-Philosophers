@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 18:47:06 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/25 16:55:46 by hiono            ###   ########.fr       */
+/*   Updated: 2024/04/26 17:39:33 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_philo	*init_philos(t_table *table, t_fork *forks)
 	t_philo	*philos;
 	int		i;
 
-	philos = malloc(table->philo_num * sizeof(t_philo));
+	philos = protect_malloc(table->philo_num * sizeof(t_philo));
 	i = 0;
 	while (i < table->philo_num)
 	{
@@ -57,7 +57,7 @@ t_fork	*init_forks(t_table *table)
 	t_fork	*forks;
 	int		i;
 
-	forks = malloc(table->philo_num * sizeof(t_fork));
+	forks = protect_malloc(table->philo_num * sizeof(t_fork));
 	i = 0;
 	while (i < table->philo_num)
 	{
