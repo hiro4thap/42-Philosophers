@@ -47,7 +47,7 @@ void	eat(t_philo *philo)
 {
 	if (!exclusive_get_bool(&philo->table->is_finished, &philo->table->lock))
 	{
-		exclusive_set_long(&philo->last_eat, get_ms(), &philo->lock);
+		exclusive_set_long(&philo->last_eat, get_msecond(), &philo->lock);
 		print_action(EAT, philo);
 	}
 	ft_usleep(philo->table->eat_time);

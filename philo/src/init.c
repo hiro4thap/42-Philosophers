@@ -24,7 +24,7 @@ t_table	init_table(int argc, char **argv)
 		table.max_eat_count = ft_atoi(argv[5]);
 	else
 		table.max_eat_count = 0;
-	table.start_time = get_ms();
+	table.start_time = get_msecond();
 	table.is_finished = 0;
 	pthread_mutex_init(&table.lock, NULL);
 	return (table);
@@ -41,7 +41,7 @@ t_philo	*init_philos(t_table *table, t_fork *forks)
 	{
 		philos[i].id = i + 1;
 		philos[i].eat_count = 0;
-		philos[i].last_eat = get_ms();
+		philos[i].last_eat = get_msecond();
 		philos[i].is_full = 0;
 		philos[i].r_fork = &forks[i];
 		philos[i].l_fork = &forks[(i + 1) % table->philo_num];

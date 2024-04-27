@@ -13,7 +13,7 @@
 #include "../inc/philo.h"
 
 // get current time in miliseconds
-long	get_ms(void)
+long	get_msecond(void)
 {
 	struct timeval	tp;
 	long			ms;
@@ -29,14 +29,14 @@ void	ft_usleep(long ms)
 {
 	long	start;
 
-	start = get_ms();
+	start = get_msecond();
 	usleep(ms * 900);
-	while ((get_ms() - start) < ms)
+	while ((get_msecond() - start) < ms)
 		usleep(ms);
 }
 
 // get timestamp to print on the screen
 long	get_timestamp(t_table *table)
 {
-	return (get_ms() - table->start_time);
+	return (get_msecond() - table->start_time);
 }

@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 17:58:38 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/26 19:52:37 by hiono            ###   ########.fr       */
+/*   Updated: 2024/04/27 14:36:55 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	*protect_malloc(size_t bytes);
 void	protect_handle_thread(
 			t_opcode opcode, pthread_t *thread, void *foo(void *), void *args);
 void	protect_handle_mutex(t_opcode opcode, pthread_mutex_t *lock);
-long	get_ms(void);
+long	get_msecond(void);
 void	ft_usleep(long ms);
 long	get_timestamp(t_table *table);
 int		ft_atoi(char *str);

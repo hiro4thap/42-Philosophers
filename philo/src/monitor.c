@@ -36,7 +36,7 @@ static int	is_any_philo_starved(t_philo *philos)
 	i = 0;
 	while (i < philos[0].table->philo_num)
 	{
-		hungry_duration = get_ms()
+		hungry_duration = get_msecond()
 			- exclusive_get_long(&philos[i].last_eat, &philos[i].lock);
 		if (philos[0].table->death_time < hungry_duration)
 		{
