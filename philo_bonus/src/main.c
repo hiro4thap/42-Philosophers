@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 18:11:33 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/26 19:26:42 by hiono            ###   ########.fr       */
+/*   Updated: 2024/05/05 19:02:23 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,14 @@ int	main(int argc, char **argv)
 {
 	t_table	table;
 	t_philo	*philos;
-	t_fork	*forks;
-	int		i;
 
 	validate_args(argc, argv);
 	table = init_table(argc, argv);
-	forks = init_forks(&table);
-	philos = init_philos(&table, forks);
+	philos = init_philos(&table);
+	init_semaphores(&table);
 	if (table.philo_num == 1)
 		solo_dinner(philos);
 	else if (1 < table.philo_num)
 		multi_dinner(&table, philos);
-	i = 0;
-	while (i < table.philo_num)
-		protect_handle_mutex(DESTROY, &forks[i++].lock);
-	free(forks);
 	free(philos);
 }

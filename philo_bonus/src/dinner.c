@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:09:59 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/26 19:22:06 by hiono            ###   ########.fr       */
+/*   Updated: 2024/05/06 14:52:50 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,63 +43,105 @@ void	solo_dinner(t_philo *philos)
 // 4) sleep
 // 5) think
 // once philosopher gets full or simulation is finished, break routine
-void	eat(t_philo *philo)
-{
-	if (!exclusive_get_bool(&philo->table->is_finished, &philo->table->lock))
-	{
-		exclusive_set_long(&philo->last_eat, get_msecond(), &philo->lock);
-		print_action(EAT, philo);
-	}
-	ft_usleep(philo->table->eat_time);
-	exclusive_set_long(&philo->eat_count, philo->eat_count + 1, &philo->lock);
-	if (exclusive_get_long(
-			&philo->eat_count, &philo->lock) == philo->table->max_eat_count)
-		exclusive_set_bool(&philo->is_full, 1, &philo->lock);
-}
-
 void	*multi_routine(void *void_philo)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)void_philo;
-	if (philo->id % 2 == 1)
-		ft_usleep(20);
-	while (!philo->table->is_finished)
+	while (!philo->is_full)
 	{
-		protect_handle_mutex(LOCK, &philo->r_fork->lock);
+		sem_wait(philo->table->forks);
 		print_action(TAKE_FORK, philo);
-		protect_handle_mutex(LOCK, &philo->l_fork->lock);
+		sem_wait(philo->table->forks);
 		print_action(TAKE_FORK, philo);
-		eat(philo);
-		protect_handle_mutex(UNLOCK, &philo->l_fork->lock);
-		protect_handle_mutex(UNLOCK, &philo->r_fork->lock);
+		print_action(EAT, philo);
+		ft_usleep(philo->table->eat_time);
+		sem_post(philo->table->forks);
+		sem_post(philo->table->forks);
+		philo->eat_count += 1;
+		if (philo->eat_count == philo->table->max_eat_count)
+		{
+			philo->is_full = 1;
+			//sem_post(philo->table->full);
+		}
 		print_action(SLEEP, philo);
 		ft_usleep(philo->table->sleep_time);
 		print_action(THINK, philo);
-		if (exclusive_get_bool(&philo->is_full, &philo->lock))
-			break ;
 	}
-	return (NULL);
+	return(NULL);
+}
+
+void	wait_full(t_philo *philos, int death_pid)
+{
+	int	i;
+
+	i = 0;
+	while (i < philos[0].table->philo_num)
+	{
+		sem_wait(philos[0].table->full);
+		i++;
+	}
+	kill(death_pid, SIGKILL);
+	exit(EXIT_SUCCESS);
+}
+
+//void	wait_death(t_philo *philos)
+//{
+
+void	kill_process(t_philo *philos)
+{
+	int	i;
+
+	sem_unlink("death");
+	sem_unlink("full");
+	sem_unlink("forks");
+	sem_unlink("message");
+	i = 0;
+	while (i < philos[0].table->philo_num)
+	{
+		kill(philos[i].pid, SIGKILL);
+		i++;
+	}
 }
 
 void	multi_dinner(t_table *table, t_philo *philos)
 {
 	int			i;
-	pthread_t	monitor_td;
+	//pthread_t	monitor_td;
+	//int			status;
+	//int			full_pid;
+	//int			death_pid;
 
 	i = 0;
 	while (i < table->philo_num)
 	{
-		protect_handle_thread(
-			CREATE, &philos[i].td, multi_routine, (void *) &philos[i]);
+		philos[i].pid = fork();
+		if (philos[i].pid < -1)
+			exit(EXIT_FAILURE);
+		if (philos[i].pid == 0)
+		{
+			//protect_handle_thread(CREATE, &monitor_td, monitor, (void *) &philos[i]);
+			//protect_handle_thread(DETACH, &monitor_td, NULL, NULL);
+			protect_handle_thread(CREATE, &philos[i].td, multi_routine, (void *) &philos[i]);
+			protect_handle_thread(JOIN, &philos[i].td, NULL, NULL);
+			exit(EXIT_SUCCESS);
+		}
 		i++;
 	}
-	protect_handle_thread(CREATE, &monitor_td, monitor, (void *) philos);
-	i = 0;
-	while (i < table->philo_num)
-	{
-		protect_handle_thread(JOIN, &philos[i].td, NULL, NULL);
-		i++;
-	}
-	protect_handle_thread(JOIN, &monitor_td, NULL, NULL);
+	ft_usleep(520);
+	kill_process(philos);
+	exit(EXIT_SUCCESS);
+	//full_pid = fork();
+	//death_pid = 0;
+	//if (0 < full_pid)
+	//	death_pid = fork();
+	//if (full_pid == 0)
+	//	wait_full(philos, death_pid);
+	//if (death_pid == 0)
+	//	exit(EXIT_SUCCESS);
+	//	//wait_death(philos, full_pid);
+	//waitpid(full_pid, &status, 0);
+	//waitpid(death_pid, &status, 0);
+	//kill_process(philos);	
+	//exit(EXIT_SUCCESS);
 }

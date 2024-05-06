@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 17:58:38 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/27 14:36:55 by hiono            ###   ########.fr       */
+/*   Updated: 2024/05/06 13:26:16 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,11 @@
 # include <sys/time.h>
 # include <stdbool.h>
 # include <errno.h>
+# include <fcntl.h>
+# include <sys/stat.h>
+# include <semaphore.h>
+# include <sys/wait.h>
+# include <signal.h>
 
 typedef enum e_opcode
 {
@@ -29,7 +34,8 @@ typedef enum e_opcode
 	UNLOCK,
 	DESTROY,
 	CREATE,
-	JOIN
+	JOIN,
+	DETACH
 }			t_opcode;
 
 typedef enum e_action
@@ -41,12 +47,6 @@ typedef enum e_action
 	DIE
 }			t_action;
 
-typedef struct s_fork
-{
-	int				id;				// fork ID
-	pthread_mutex_t	lock;			// is locked when taken by a philospher
-}				t_fork;
-
 typedef struct s_table
 {
 	int				philo_num;		// the number of philosophers
@@ -56,17 +56,20 @@ typedef struct s_table
 	long			start_time;		// time when the simulation starts
 	bool			is_finished;	// is flaged on when the simulation is done
 	int				max_eat_count;	// times to get full, where 0 means infinite
+	sem_t			*death;			// semaphore counting the number of dead
+	sem_t			*full;			// semaphore counting the number of full philos
+	sem_t			*forks;			// semaphore counting the available forks
+	sem_t			*message;		// semaphore locking displaying message
 	pthread_mutex_t	lock;			// is locked when read / written by thread
 }			t_table;
 
 typedef struct s_philo
 {
 	int				id;				// philospher's ID
+	int				pid;			// process ID
 	long			eat_count;		// how many times they've eaten
 	long			last_eat;		// last time they ate
 	bool			is_full;		// flag representing if they are full
-	t_fork			*r_fork;		// is used to lock fork while eating
-	t_fork			*l_fork;		// is used to lock fork while eating
 	pthread_t		td;				// thread ID, passed to create / join thread
 	t_table			*table;			// is used to refer to the params in table
 	pthread_mutex_t	lock;			// is locked when read / written by thread
@@ -74,8 +77,8 @@ typedef struct s_philo
 
 void	validate_args(int argc, char **argv);
 t_table	init_table(int argc, char **argv);
-t_philo	*init_philos(t_table *table, t_fork *forks);
-t_fork	*init_forks(t_table *table);
+t_philo	*init_philos(t_table *table);
+void	init_semaphores(t_table *table);
 void	*protect_malloc(size_t bytes);
 void	protect_handle_thread(
 			t_opcode opcode, pthread_t *thread, void *foo(void *), void *args);

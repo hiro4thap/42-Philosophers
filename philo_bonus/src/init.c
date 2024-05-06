@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 18:47:06 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/26 17:39:33 by hiono            ###   ########.fr       */
+/*   Updated: 2024/05/06 14:47:52 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_table	init_table(int argc, char **argv)
 	return (table);
 }
 
-t_philo	*init_philos(t_table *table, t_fork *forks)
+t_philo	*init_philos(t_table *table)
 {
 	t_philo	*philos;
 	int		i;
@@ -43,8 +43,6 @@ t_philo	*init_philos(t_table *table, t_fork *forks)
 		philos[i].eat_count = 0;
 		philos[i].last_eat = get_msecond();
 		philos[i].is_full = 0;
-		philos[i].r_fork = &forks[i];
-		philos[i].l_fork = &forks[(i + 1) % table->philo_num];
 		philos[i].table = table;
 		pthread_mutex_init(&philos[i].lock, NULL);
 		i++;
@@ -52,18 +50,14 @@ t_philo	*init_philos(t_table *table, t_fork *forks)
 	return (philos);
 }
 
-t_fork	*init_forks(t_table *table)
+void	init_semaphores(t_table *table)
 {
-	t_fork	*forks;
-	int		i;
-
-	forks = protect_malloc(table->philo_num * sizeof(t_fork));
-	i = 0;
-	while (i < table->philo_num)
-	{
-		forks[i].id = i + 1;
-		pthread_mutex_init(&forks[i].lock, NULL);
-		i++;
-	}
-	return (forks);
+	sem_unlink("death");
+	sem_unlink("full");
+	sem_unlink("forks");
+	sem_unlink("message");
+	table->death = sem_open("death", O_CREAT, 0600, 0);
+	table->full = sem_open("full", O_CREAT, 0600, 0);
+	table->forks = sem_open("forks", O_CREAT, 0600, table->philo_num);
+	table->message = sem_open("message", O_CREAT, 0600, 1);
 }

@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 12:56:24 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/26 19:43:03 by hiono            ###   ########.fr       */
+/*   Updated: 2024/05/05 17:37:19 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ void	protect_handle_thread(
 		error = pthread_create(thread, NULL, foo, args);
 	else if (opcode == JOIN)
 		error = pthread_join(*thread, NULL);
+	else if (opcode == DETACH)
+		error = pthread_detach(*thread);
 	handle_pthread_error(error, opcode);
 }
 

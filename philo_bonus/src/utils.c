@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 11:48:26 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/26 19:30:21 by hiono            ###   ########.fr       */
+/*   Updated: 2024/05/06 14:52:31 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ void	print_action(t_action action, t_philo *philo)
 	long	timestamp;
 
 	timestamp = get_timestamp(philo->table);
-	if (exclusive_get_bool(&philo->table->is_finished, &philo->table->lock))
-		return ;
+	sem_wait(philo->table->message);
 	if (action == TAKE_FORK)
 		printf("%-8ld %4d has taken a fork\n", timestamp, philo->id);
 	else if (action == EAT)
@@ -30,6 +29,8 @@ void	print_action(t_action action, t_philo *philo)
 		printf("%-8ld %4d is thinking\n", timestamp, philo->id);
 	else if (action == DIE)
 		printf("%-8ld %4d died\n", timestamp, philo->id);
+	if (action != DIE)
+		sem_post(philo->table->message);
 }
 
 // atoi where inputs should be poisive numbers
