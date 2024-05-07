@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 17:58:38 by hiono             #+#    #+#             */
-/*   Updated: 2024/05/06 13:26:16 by hiono            ###   ########.fr       */
+/*   Updated: 2024/05/07 13:31:59 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ typedef struct s_table
 	long			start_time;		// time when the simulation starts
 	bool			is_finished;	// is flaged on when the simulation is done
 	int				max_eat_count;	// times to get full, where 0 means infinite
-	sem_t			*death;			// semaphore counting the number of dead
-	sem_t			*full;			// semaphore counting the number of full philos
+	sem_t			*death;			// semaphore counting the number of deads
+	sem_t			*full;			// semaphore counting the number of fulls 
 	sem_t			*forks;			// semaphore counting the available forks
 	sem_t			*message;		// semaphore locking displaying message
 	pthread_mutex_t	lock;			// is locked when read / written by thread
@@ -88,9 +88,9 @@ void	ft_usleep(long ms);
 long	get_timestamp(t_table *table);
 int		ft_atoi(char *str);
 void	print_action(t_action action, t_philo *philo);
-void	solo_dinner(t_philo *philos);
-void	multi_dinner(t_table *table, t_philo *philos);
+void	dinner(t_table *table, t_philo *philos);
 void	*monitor(void *v_philos);
+void	monitor_philos(t_philo *philos);
 void	exclusive_set_bool(bool *dst, bool value, pthread_mutex_t *lock);
 bool	exclusive_get_bool(bool *value, pthread_mutex_t *lock);
 void	exclusive_set_long(long *dst, long value, pthread_mutex_t *lock);

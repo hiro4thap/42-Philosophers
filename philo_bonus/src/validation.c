@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 18:22:19 by hiono             #+#    #+#             */
-/*   Updated: 2024/04/26 19:32:04 by hiono            ###   ########.fr       */
+/*   Updated: 2024/05/07 13:21:46 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	validate_args(int argc, char **argv)
 	}
 	if (!is_args_pnum(argc, argv))
 	{
-		printf("All arguments should be positive numbers");
+		printf("All arguments should be positive numbers\n");
 		exit (EXIT_FAILURE);
 	}
 }

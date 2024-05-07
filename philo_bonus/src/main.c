@@ -6,11 +6,19 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 18:11:33 by hiono             #+#    #+#             */
-/*   Updated: 2024/05/05 19:02:23 by hiono            ###   ########.fr       */
+/*   Updated: 2024/05/07 13:12:46 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
+
+void	unlink_sems(void)
+{
+	sem_unlink("death");
+	sem_unlink("full");
+	sem_unlink("forks");
+	sem_unlink("message");
+}
 
 // 1) validate arguments
 // 2) initialize structures correspoinding to the arguments
@@ -25,9 +33,7 @@ int	main(int argc, char **argv)
 	table = init_table(argc, argv);
 	philos = init_philos(&table);
 	init_semaphores(&table);
-	if (table.philo_num == 1)
-		solo_dinner(philos);
-	else if (1 < table.philo_num)
-		multi_dinner(&table, philos);
+	dinner(&table, philos);
+	unlink_sems();
 	free(philos);
 }

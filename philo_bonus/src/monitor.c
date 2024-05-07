@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:14:30 by hiono             #+#    #+#             */
-/*   Updated: 2024/05/05 19:01:24 by hiono            ###   ########.fr       */
+/*   Updated: 2024/05/07 13:31:05 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,41 @@ void	*monitor(void *v_philo)
 		usleep(100);
 	}
 	return (NULL);
+}
+
+void	wait_full(t_philo *philos)
+{
+	int	i;
+
+	i = 0;
+	while (i < philos[0].table->philo_num)
+	{
+		sem_wait(philos[0].table->full);
+		i++;
+	}
+	exit(EXIT_SUCCESS);
+}
+
+void	wait_death(t_philo *philos, int full_pid)
+{
+	sem_wait(philos[0].table->death);
+	kill(full_pid, SIGKILL);
+	exit(EXIT_SUCCESS);
+}
+
+void	monitor_philos(t_philo *philos)
+{
+	int			full_pid;
+	int			death_pid;
+	int			status;
+
+	full_pid = fork();
+	if (full_pid == 0)
+		wait_full(philos);
+	death_pid = fork();
+	if (death_pid == 0)
+		wait_death(philos, full_pid);
+	waitpid(full_pid, &status, 0);
+	kill(death_pid, SIGKILL);
+	waitpid(death_pid, &status, 0);
 }
