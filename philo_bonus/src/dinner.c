@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:09:59 by hiono             #+#    #+#             */
-/*   Updated: 2024/05/07 15:13:02 by hiono            ###   ########.fr       */
+/*   Updated: 2024/05/07 15:34:00 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	kill_philos(t_philo *philos)
 // once philosopher gets full or simulation is finished, break routine
 void	routine(t_philo *philo)
 {
-	if (philo->table->philo_num / 2 < philo->id)
+	if (1 < philo->table->philo_num && philo->table->philo_num / 2 < philo->id)
 		ft_usleep(20);
 	while (!philo->is_full)
 	{
