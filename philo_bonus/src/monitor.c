@@ -6,7 +6,7 @@
 /*   By: hiono <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:14:30 by hiono             #+#    #+#             */
-/*   Updated: 2024/05/07 13:31:05 by hiono            ###   ########.fr       */
+/*   Updated: 2024/05/07 15:18:02 by hiono            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	*monitor(void *v_philo)
 			sem_post(philo->table->death);
 			break ;
 		}
-		usleep(100);
+		usleep(1000);
 	}
 	return (NULL);
 }
