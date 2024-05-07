@@ -39,8 +39,4 @@ fclean:clean
 
 re:fclean all
 
-#TODO:remove before submission
-debug: $(SRCS)
-	$(CC) $(SRCS) $(CFLAGS) $(INCS) -g -o $@
-
 .PHONY: all clean fclean re
